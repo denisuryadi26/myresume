@@ -4,25 +4,28 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class About extends CIF_Controller {
+class About extends CIF_Controller
+{
 
     public $layout = 'full';
     public $module = "about";
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('About_model');
         $this->permission();
     }
 
-    public function index() {
+    public function index()
+    {
         $this->load->library("form_validation");
         $config['upload_path'] = './cdn/about/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|ico';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|ico|pdf';
         $this->load->library('upload', $config);
         $data['item'] = new stdClass();
         foreach ($this->About_model->get() as $about) {
-            $data['item']->{ $about->key } = $about->value;
+            $data['item']->{$about->key} = $about->value;
             $this->form_validation->set_rules($about->key, 'lang:global_' . $about->key, "trim");
         }
         $this->form_validation->set_rules('image', 'lang:global_avatar', "callback_image");
@@ -39,7 +42,8 @@ class About extends CIF_Controller {
         }
     }
 
-    public function image($var) {
+    public function image($var)
+    {
 
         if ($this->upload->do_upload('avatar')) {
             $data = $this->upload->data();
@@ -51,7 +55,8 @@ class About extends CIF_Controller {
         }
         return true;
     }
-    public function resume($var) {
+    public function resume($var)
+    {
 
         if ($this->upload->do_upload('resume')) {
             $data = $this->upload->data();
@@ -63,5 +68,4 @@ class About extends CIF_Controller {
         }
         return true;
     }
-
 }
